@@ -1,8 +1,15 @@
 import assert from 'assert';
-import ioMagicianBackend from '../lib';
+const controller = require("../lib/core/client/controller/ControlableUnitController");
+const co = require('co');
 
-describe('io-magician-backend', function () {
-  it('should have unit test!', function () {
-    assert(false, 'we expected this package author to add actual unit tests.');
-  });
+describe('ControlableUnitController', function () {
+    describe('getAll', function () {
+        it('should set response body', function () {
+            let req;
+            let res;
+            co(controller.getAll(req, res));
+            assert(false, 'we expected this package author to add actual unit tests.');
+        });
+    });
+
 });

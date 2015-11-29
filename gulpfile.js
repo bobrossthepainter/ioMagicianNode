@@ -1,4 +1,3 @@
-'use strict';
 var gulp = require('gulp');
 var eslint = require('gulp-eslint');
 var excludeGitignore = require('gulp-exclude-gitignore');
@@ -15,70 +14,70 @@ var isparta = require('isparta');
 require('babel-core/register');
 
 gulp.task('static', function () {
-  return gulp.src('**/*.js')
-    .pipe(excludeGitignore())
-    .pipe(eslint())
-    .pipe(eslint.format())
-    .pipe(eslint.failAfterError());
+    return gulp.src('**/*.js')
+        .pipe(excludeGitignore())
+        .pipe(eslint())
+        .pipe(eslint.format())
+        .pipe(eslint.failAfterError());
 });
 
 gulp.task('nsp', function (cb) {
-  nsp('package.json', cb);
+    nsp('package.json', cb);
 });
 
 gulp.task('pre-test', function () {
-  return gulp.src('lib/**/*.js')
-    .pipe(istanbul({
-      includeUntested: true
-      , instrumenter: isparta.Instrumenter
-    }))
-    .pipe(istanbul.hookRequire());
+    return gulp.src('lib/**/*.js')
+        .pipe(istanbul({
+            includeUntested: true
+            , instrumenter: isparta.Instrumenter
+        }))
+        .pipe(istanbul.hookRequire());
 });
 
 gulp.task('test', ['pre-test'], function (cb) {
-  var mochaErr;
+    var mochaErr;
 
-  gulp.src('test/**/*.js')
-    .pipe(plumber())
-    .pipe(mocha({reporter: 'spec'}))
-    .on('error', function (err) {
-      mochaErr = err;
-    })
-    .pipe(istanbul.writeReports())
-    .on('end', function () {
-      cb(mochaErr);
-    });
+    gulp.src('test/**/*.js')
+        .pipe(plumber())
+        .pipe(mocha({reporter: 'spec'}))
+        .on('error', function (err) {
+            mochaErr = err;
+        })
+        .pipe(istanbul.writeReports())
+        .on('end', function () {
+            cb(mochaErr);
+        });
 });
 
 gulp.task('babel', ['clean'], function () {
-  return gulp.src('lib/**/*.js')
-    .pipe(babel({
-      //plugins: ['transform-regenerator',
-      //  'transform-es2015-unicode-regex',
-      //  'transform-es2015-typeof-symbol',
-      //  'transform-es2015-template-literals',
-      //  'transform-es2015-sticky-regex',
-      //  'transform-es2015-spread',
-      //  'transform-es2015-shorthand-properties',
-      //  'transform-es2015-parameters',
-      //  'transform-es2015-object-super',
-      //  'transform-es2015-modules-commonjs',
-      //  'transform-es2015-literals',
-      //  'transform-es2015-function-name',
-      //  'transform-es2015-for-of',
-      //  'transform-es2015-destructuring',
-      //  //'transform-es2015-constants',
-      //  'transform-es2015-computed-properties',
-      //  'transform-es2015-arrow-functions',
-      //  'transform-es2015-block-scoped-functions',
-      //  'transform-es2015-block-scoping',
-      //  'transform-runtime']
-    }))
-    .pipe(gulp.dest('dist'));
+    return gulp.src('lib/**/*.js')
+        .pipe(babel({
+            //plugins: ['transform-regenerator',
+            //  'transform-es2015-unicode-regex',
+            //  'transform-es2015-typeof-symbol',
+            //  'transform-es2015-template-literals',
+            //  'transform-es2015-sticky-regex',
+            //  'transform-es2015-spread',
+            //  'transform-es2015-shorthand-properties',
+            //  'transform-es2015-parameters',
+            //  'transform-es2015-object-super',
+            //  'transform-es2015-modules-commonjs',
+            //  'transform-es2015-literals',
+            //  'transform-es2015-function-name',
+            //  'transform-es2015-for-of',
+            //  'transform-es2015-destructuring',
+            //  //'transform-es2015-constants',
+            //  'transform-es2015-computed-properties',
+            //  'transform-es2015-arrow-functions',
+            //  'transform-es2015-block-scoped-functions',
+            //  'transform-es2015-block-scoping',
+            //  'transform-runtime']
+        }))
+        .pipe(gulp.dest('dist'));
 });
 
 gulp.task('clean', function () {
-  return del('dist');
+    return del('dist');
 });
 
 gulp.task('prepublish', ['nsp', 'babel']);
